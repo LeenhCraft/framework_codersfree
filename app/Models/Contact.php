@@ -6,10 +6,10 @@ use mysqli;
 
 class Contact
 {
-    protected $db_host = 'localhost';
-    protected $db_user = "db_leenh";
-    protected $db_pass = "321321";
-    protected $db_name = "db_mvc";
+    protected $db_host = DB_HOST;
+    protected $db_user = DB_USER;
+    protected $db_pass = DB_PASS;
+    protected $db_name = DB_NAME;
     protected $connection;
 
     public function __construct()
