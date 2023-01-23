@@ -13,6 +13,7 @@ class Model
     protected $connection;
     protected $query;
     protected $table;
+    protected $id = "id";
 
     public function __construct()
     {
@@ -52,7 +53,7 @@ class Model
 
     public function find($id)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE id = {$id}";
+        $sql = "SELECT * FROM {$this->table} WHERE {$this->id} = {$id}";
         return $this->query($sql)->first();
     }
 
@@ -65,5 +66,15 @@ class Model
         $sql = "SELECT * FROM {$this->table} WHERE {$column} {$operator} '{$value}'";
         $this->query($sql);
         return $this;
+    }
+
+    public function create($data)
+    {
+        $columns = implode(", ", array_keys($data));
+        $values = "'" . implode("', '", array_values($data)) . "'";
+        $sql = "INSERT INTO {$this->table} ({$columns}) VALUES ({$values})";
+        $this->query($sql);
+        $insert_id = $this->connection->insert_id;
+        return $this->find($insert_id);
     }
 }

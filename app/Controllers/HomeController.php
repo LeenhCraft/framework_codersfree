@@ -9,7 +9,11 @@ class HomeController extends Controller
     public function index()
     {
         $contactModel = new Contact();
-        return $contactModel->where("id", 2)->get();
+        return $contactModel->create([
+            "name" => "Juan",
+            "email" => "2018100486@ucss.pe",
+            "phone" => "123456789",
+        ]);
 
         return $this->view("home", [
             "title" => "Home",
