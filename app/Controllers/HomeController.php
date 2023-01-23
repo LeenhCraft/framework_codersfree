@@ -9,8 +9,8 @@ class HomeController extends Controller
     public function index()
     {
         $contactModel = new Contact();
-        return $contactModel->create([
-            "name" => "Juan",
+        return $contactModel->update(4, [
+            "name" => "Juan craft",
             "email" => "2018100486@ucss.pe",
             "phone" => "123456789",
         ]);
