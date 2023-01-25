@@ -6,7 +6,7 @@ class Controller
 {
     public function view($route, $data = [])
     {
-        extract($data);//extrae los datos del array y los convierte en variables
+        extract($data); //extrae los datos del array y los convierte en variables
         $route = str_replace(".", "/", $route);
         if (file_exists("../resources/views/{$route}.php")) {
             ob_start();
@@ -16,5 +16,10 @@ class Controller
         } else {
             return "404 el archivo no existe";
         }
+    }
+
+    public function redirect($route)
+    {
+        header("Location: {$route}");
     }
 }

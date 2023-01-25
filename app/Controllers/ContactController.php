@@ -13,9 +13,17 @@ class ContactController extends Controller
         return $this->view('contacts.index', compact('contacts'));
     }
 
+    public function create()
+    {
+        return $this->view('contacts.create');
+    }
+
     public function store()
     {
-        return 'aqui se procesara el formulario de crear contacto';
+        $data = $_POST;
+        $model = new Contact();
+        $model->create($data);
+        return $this->redirect('/contacts');
     }
 
     public function show($id)
