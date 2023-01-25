@@ -1,21 +1,18 @@
 <?php
 
-use Lib\Route;
+use App\Controllers\ContactController;
 use App\Controllers\HomeController;
+use Lib\Route;
 
 Route::get('/', [HomeController::class, 'index']);
 
-Route::get('/contact', function () {
-    return 'Hello desde contacto';
-});
-
-Route::get('/about', function () {
-    return 'Hello desde acerca de';
-});
-
-Route::get('cursos/:slug', function ($slug) {
-    return 'Hello desde cursos ' . $slug;
-});
-
+Route::get('/contacts', [ContactController::class, 'index']);
+Route::get('/contacts/create', [ContactController::class, 'create']);
+Route::get('/contacts/:id', [ContactController::class, 'show']);
+Route::get('/contacts/:id/edit', [ContactController::class, 'edit']);
+Route::post('/contacts', [ContactController::class, 'store']);
+Route::post('/contacts/:id', [ContactController::class, 'update']);
+Route::post('/contacts/:id/delete', [ContactController::class, 'destroy']);
 
 Route::dispatch();
+// Lib\Route::dispatch();
