@@ -21,8 +21,6 @@ class HomeController extends Controller
         //     "email" => "fake gmail"
         // ]);
         // return $contactModel->delete(13);
-
-
         return $this->view("home", [
             "title" => "Home",
             "description" => "Esta es la página home",
