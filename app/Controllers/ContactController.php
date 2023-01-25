@@ -28,21 +28,29 @@ class ContactController extends Controller
 
     public function show($id)
     {
-        return 'aqui se mostrara el detalle del contact con id ' . $id;
+        $model = new Contact();
+        $contact = $model->find($id);
+        return $this->view('contacts.show', compact('contact'));
     }
 
     public function edit($id)
     {
-        return 'aqui se mostrara el formulario para editar contact';
+        $model = new Contact();
+        $contact = $model->find($id);
+        return $this->view('contacts.edit', compact('contact'));
     }
 
     public function update($id)
     {
-        return 'aqui se procesara el formulario de editar contacto';
+        $data = $_POST;
+        $model = new Contact();
+        $model->update($id, $data);
+        return $this->redirect("/contacts/{$id}");
     }
 
     public function destroy($id)
     {
-        return 'aqui se procesara el formulario de eliminar contacto';
+        $model = new Contact();
+        $model->delete($id);
     }
 }
