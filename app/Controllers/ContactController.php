@@ -52,5 +52,6 @@ class ContactController extends Controller
     {
         $model = new Contact();
         $model->delete($id);
+        return $this->redirect('/contacts');
     }
 }

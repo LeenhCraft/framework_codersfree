@@ -16,6 +16,9 @@
     <p><b>Nombre:</b> <?php echo $contact['name']; ?></p>
     <p><b>Email:</b> <?php echo $contact['email']; ?></p>
     <p><b>Teléfono:</b> <?php echo $contact['phone']; ?></p>
+    <form action="/contacts/<?= $contact['id'] ?>/delete" method="post">
+        <button type="submit">Eliminar</button>
+    </form>
 </body>
 
 </html>

@@ -11,6 +11,7 @@
 <body>
     <h1>listado de contactos</h1>
     <a href="/contacts/create">Crear contacto</a>
+    <p>Total de contáctos: <?= count($contacts) ?></p>
     <ul>
         <?php foreach ($contacts as $contact) : ?>
             <li>
