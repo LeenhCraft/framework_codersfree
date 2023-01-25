@@ -28,9 +28,19 @@ class Model
         }
     }
 
-    public function query($sql)
+    public function query($sql, $data = [], $params = null)
     {
-        $this->query = $this->connection->query($sql);
+        if ($data) { //si data es diferente de null
+            if ($params == null) {
+                $params = str_repeat("s", count($data));
+            }
+            $stmt = $this->connection->prepare($sql);
+            $stmt->bind_param($params, ...$data);
+            $stmt->execute();
+            $this->query = $stmt->get_result();
+        } else {
+            $this->query = $this->connection->query($sql);
+        }
         return $this;
     }
 
@@ -53,8 +63,8 @@ class Model
 
     public function find($id)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE {$this->id} = {$id}";
-        return $this->query($sql)->first();
+        $sql = "SELECT * FROM {$this->table} WHERE {$this->id} = ?";
+        return $this->query($sql, [$id], "i")->first();
     }
 
     public function where($column, $operator = "=", $value = null)
@@ -63,18 +73,23 @@ class Model
             $value = $operator;
             $operator = "=";
         }
-        $value = $this->connection->real_escape_string($value);
-        $sql = "SELECT * FROM {$this->table} WHERE {$column} {$operator} '{$value}'";
-        $this->query($sql);
+        //sentencia preparada
+        // $value = $this->connection->real_escape_string($value);
+        // return $value;
+        $sql = "SELECT * FROM {$this->table} WHERE {$column} {$operator} ?";
+        $this->query($sql, [$value]);
         return $this;
     }
 
     public function create($data)
     {
         $columns = implode(", ", array_keys($data));
-        $values = "'" . implode("', '", array_values($data)) . "'";
-        $sql = "INSERT INTO {$this->table} ({$columns}) VALUES ({$values})";
-        $this->query($sql);
+        // $values = "'" . implode("', '", array_values($data)) . "'";
+        $values = array_values($data);
+
+        // $sql = "INSERT INTO {$this->table} ({$columns}) VALUES ({$values})";
+        $sql = "INSERT INTO {$this->table} ({$columns}) VALUES (" . str_repeat("?,", count($values) - 1) . "?)";
+        $this->query($sql, $values);
         $insert_id = $this->connection->insert_id;
         return $this->find($insert_id);
     }
@@ -83,18 +98,20 @@ class Model
     {
         $fields = [];
         foreach ($data as $key => $value) {
-            $fields[] = "{$key} = '{$value}'";
+            $fields[] = "{$key} = ?";
         }
         $fields = implode(", ", $fields);
-        $sql = "UPDATE {$this->table} SET {$fields} WHERE {$this->id} = {$id}";
-        $this->query($sql);
+        $sql = "UPDATE {$this->table} SET {$fields} WHERE {$this->id} = ?";
+        $values = array_values($data);
+        $values[] = $id;
+        $this->query($sql, $values);
         return $this->find($id);
     }
 
     public function delete($id)
     {
-        $sql = "DELETE FROM {$this->table} WHERE {$this->id} = {$id}";
-        $this->query($sql);
+        $sql = "DELETE FROM {$this->table} WHERE {$this->id} = ?";
+        $this->query($sql, [$id], 'i');
         return $this->connection->affected_rows;
     }
 }
