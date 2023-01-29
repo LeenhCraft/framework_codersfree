@@ -54,6 +54,14 @@ class Model
         return $this->query->fetch_all(MYSQLI_ASSOC);
     }
 
+    public function paginate($cant = 15)
+    {
+        $page = isset($_GET['page']) ? $_GET['page'] : 1;
+        $start = ($page - 1) * $cant;
+        $sql = "SELECT * FROM {$this->table} LIMIT {$start}, {$cant}";
+        return $this->query($sql)->get();
+    }
+
     //consulttas preparadas
     public function all()
     {
