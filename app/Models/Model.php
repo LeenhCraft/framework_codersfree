@@ -56,10 +56,28 @@ class Model
 
     public function paginate($cant = 15)
     {
+        $uri = $_SERVER['REQUEST_URI'];
+        $uri = trim($uri, '/');
+        if (strpos($uri, '?')) {
+            $uri = substr($uri, 0, strpos($uri, '?'));
+        }
         $page = isset($_GET['page']) ? $_GET['page'] : 1;
         $start = ($page - 1) * $cant;
-        $sql = "SELECT * FROM {$this->table} LIMIT {$start}, {$cant}";
-        return $this->query($sql)->get();
+        $sql = "SELECT SQL_CALC_FOUND_ROWS * FROM {$this->table} LIMIT {$start}, {$cant}";
+        $data = $this->query($sql)->get();
+        $total = $this->query("SELECT FOUND_ROWS() as total")->first()['total'];
+        $last_page = ceil($total / $cant);
+        return [
+            'total' => $total,
+            'from' => $start + 1, //desde que registro se muestra
+            'to' => $start + count($data), // hasta que registro se muestra
+            'current_page' => $page, //pagina actual
+            'per_page' => $cant, //cantidad de registros por pagina
+            'next_page_url' => $page < $last_page ?  "/{$uri}?page=" . ($page + 1) : null, //pagina siguiente
+            'prev_page_url' => $page > 1 ? "/{$uri}?page=" . ($page - 1) : null, //pagina anterior
+            'last_page' => $last_page, //ultimo numero de pagina
+            'data' => $data,
+        ];
     }
 
     //consulttas preparadas
