@@ -18,7 +18,7 @@
 
         <?php for ($i = 1; $i <=  $$paginate['last_page']; $i++) : ?>
             <li class="page-item <?= $$paginate['current_page'] == $i ? 'active' : '' ?>">
-                <a class="page-link" href="<?= '/contacts?page=' . $i ?>">
+                <a class="page-link" href="<?= '/contacts?page=' . $i ?><?= isset($_GET['search']) ? "&search={$_GET['search']}" : "" ?>">
                     <?= $i ?>
                 </a>
             </li>

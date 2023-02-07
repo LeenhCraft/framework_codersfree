@@ -21,7 +21,7 @@
         <a class="btn btn-success" href="/contacts/create">Crear contacto</a>
         <p>Total de contáctos: <?= count($contacts) ?></p>
         <ul>
-            <?php foreach ($contacts as $contact) : ?>
+            <?php foreach ($contacts['data'] as $contact) : ?>
                 <li>
                     <a href="/contacts/<?php echo $contact['id']; ?>">
                         <?php echo $contact['name']; ?>
@@ -33,9 +33,9 @@
         <?php
 
         //indicar el nombre de la variable que contiene la paginación
-        // $paginate = "contacts";
+        $paginate = "contacts";
 
-        // require_once '../resources/views/assets/pagination.php';
+        require_once '../resources/views/assets/pagination.php';
 
         ?>
     </div>

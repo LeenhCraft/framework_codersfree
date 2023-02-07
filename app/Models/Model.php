@@ -15,6 +15,8 @@ class Model
     protected $table;
     protected $id = "id";
 
+    protected $sql, $data = [], $params = null;
+
     public function __construct()
     {
         $this->connection();
@@ -46,11 +48,17 @@ class Model
 
     public function first()
     {
+        if (empty($this->query)) {
+            $this->query($this->sql, $this->data, $this->params);
+        }
         return $this->query->fetch_assoc();
     }
 
     public function get()
     {
+        if (empty($this->query)) {
+            $this->query($this->sql, $this->data, $this->params);
+        }
         return $this->query->fetch_all(MYSQLI_ASSOC);
     }
 
@@ -63,8 +71,15 @@ class Model
         }
         $page = isset($_GET['page']) ? $_GET['page'] : 1;
         $start = ($page - 1) * $cant;
-        $sql = "SELECT SQL_CALC_FOUND_ROWS * FROM {$this->table} LIMIT {$start}, {$cant}";
-        $data = $this->query($sql)->get();
+
+        if ($this->sql) {
+            $sql = $this->sql . " LIMIT {$start}, {$cant}";
+            $data = $this->query($sql, $this->data, $this->params)->get();
+        } else {
+            $sql = "SELECT SQL_CALC_FOUND_ROWS * FROM {$this->table} LIMIT {$start}, {$cant}";
+            $data = $this->query($sql)->get();
+        }
+
         $total = $this->query("SELECT FOUND_ROWS() as total")->first()['total'];
         $last_page = ceil($total / $cant);
         return [
@@ -102,8 +117,12 @@ class Model
         //sentencia preparada
         // $value = $this->connection->real_escape_string($value);
         // return $value;
-        $sql = "SELECT * FROM {$this->table} WHERE {$column} {$operator} ?";
-        $this->query($sql, [$value]);
+
+        $this->sql = "SELECT SQL_CALC_FOUND_ROWS * FROM {$this->table} WHERE {$column} {$operator} ?";
+
+        $this->data[] = $value;
+
+        // $this->query($sql, [$value]);
         return $this;
     }
 

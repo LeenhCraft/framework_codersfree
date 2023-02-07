@@ -10,13 +10,14 @@ class ContactController extends Controller
     {
 
         $model = new Contact();
+        $perPage = 3;
         if (isset($_GET['search'])) {
 
-            $contacts = $model->where('name', 'like', "%{$_GET['search']}%")->get();
+            $contacts = $model->where('name', 'like', "%{$_GET['search']}%")->paginate($perPage);
         } else {
 
-            $contacts = $model->all();
-            // $contacts = $model->paginate(3);
+            // $contacts = $model->all();
+            $contacts = $model->paginate($perPage);
             // return $contacts;
         }
 
