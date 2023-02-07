@@ -1,30 +1,18 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crear contacto</title>
-</head>
-
-<body>
+<?php require_once '../resources/views/inc/header.php'; ?>
     <h1>Crear contácto</h1>
     <form action="/contacts" method="post">
-        <div>
-            <label for="name">Nombre</label>
-            <input type="text" name="name" id="name">
+        <div class="form-group">
+            <label for="name" class="form-label">Nombre</label>
+            <input type="text" name="name" id="name" class="form-control">
         </div>
         <div>
-            <label for="email">Email</label>
-            <input type="email" name="email" id="email">
+            <label for="email" class="form-label">Email</label>
+            <input type="email" name="email" id="email" class="form-control">
         </div>
         <div>
-            <label for="phone">Teléfono</label>
-            <input type="text" name="phone" id="phone">
+            <label for="phone" class="form-label">Teléfono</label>
+            <input type="text" name="phone" id="phone" class="form-control">
         </div>
-        <button type="submit">Guardar</button>
+        <button type="submit" class="btn btn-primary my-3">Guardar</button>
     </form>
-</body>
-
-</html>
+<?php require_once '../resources/views/inc/footer.php'; ?>
